@@ -1,10 +1,10 @@
 % Prog principal
-global A B L R S
+global A B L R S FOUT
 
 %% les test de TP4
-%test4a;
-%test4b;
-test4c;
+%test4a; FOUT = fopen('test4a.res','w');	
+test4b; FOUT = fopen('test4b.res','w');	
+%test4c; FOUT = fopen('test4c.res','w');	
 
 
 lme = [];
@@ -14,20 +14,8 @@ lmi = [];
 %% calculer lambda lme initial par moindre carrées
 [e, ce, ci, g, ae, ai, hl, indic] = chs(4, xy, lme, lmi);
 lme = -ae'\g; 
-%% 
+%% calculer lambda lmi initial
 lmi = repelem(0,length(xy)/2);
-
-%%
-%indic = 5;
-%[e, ce, ci, g, ae, ai, hl, indic] = chs(indic, xy, lme, lmi)
-
-
-%---------------------------------------------
-%small = 1.e-5;
-%big = 1.e+5;
-
-%[L, d, flag] = cholmod(hl, small, big)
-%L*diag(d)*L'
 
 options.tol = [1.e-6 1.e-6 1.e-6]; %précision
 options.maxit = 100; %nb max itérations
@@ -37,4 +25,4 @@ options.maxit = 100; %nb max itérations
 
 [x, lme, lmi, info] = sqp(@chs, xy, lme, lmi, options);
 info
-
+fclose(FOUT);
