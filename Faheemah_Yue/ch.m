@@ -3,8 +3,8 @@ global A B L R S FOUT
 
 %% les test de TP4
 %test4a; FOUT = fopen('test4a.res','w');	
-test4b; FOUT = fopen('test4b.res','w');	
-%test4c; FOUT = fopen('test4c.res','w');	
+%test4b; FOUT = fopen('test4b.res','w');	
+test4c; FOUT = fopen('test4c.res','w');	
 
 
 lme = [];

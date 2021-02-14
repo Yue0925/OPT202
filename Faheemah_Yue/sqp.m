@@ -12,8 +12,6 @@ function [x, lme, lmi, info] = sqp(simul, x, lme, lmi, options)
   me = length(lme);
   mi = length(lmi);
   
-  format_sortie = ""; % affichage sur l'écran
-  
   %% vérification vars entrées
   if n==0
     error("ERROR: valeur initial x est vide. \n");
@@ -41,8 +39,8 @@ function [x, lme, lmi, info] = sqp(simul, x, lme, lmi, options)
   lme_h=[lme]; % historique des lme
   lmi_h=[lmi]; % historique des lme
   
-  fprintf(FOUT, "------------------------------------------- \n "); 
-  fprintf(FOUT, "iter\t\t |gl|\t\t |ce|\t\t (ci,lmi) \n "); 
+  fprintf(FOUT, "------------------------------------------- \n"); 
+  fprintf(FOUT, "iter\t\t |gl|\t\t |ce|\t\t (ci,lmi) \n"); 
   
   %% algo quasi-Newthon
   while 1
@@ -52,10 +50,8 @@ function [x, lme, lmi, info] = sqp(simul, x, lme, lmi, options)
       fprintf(FOUT, '%d\t %e\t %e\t %e\t \n', info.niter, norm(grad_lag, Inf), norm(ce, Inf), norm(min(min(kron(lmi, ones(p,1)), -ci)), Inf)); 
     endif
     
-    %fprintf(FOUT, '%d\t %e\t %e\t %e\t \n', info.niter, norm(grad_lag, Inf), norm(ce, Inf), lmi'*ci); 
-    
     %% sortir en cas de test d'arrêt vérifié
-    if norm(grad_lag, Inf) <= options.tol(1) && norm(ce, Inf) <= options.tol(2) && norm(min(min(lmi, -ci)), Inf) <= options.tol(3)
+    if norm(grad_lag, Inf) <= options.tol(1) && norm(ce, Inf) <= options.tol(2) && norm(min(min(kron(lmi, ones(p,1)), -ci)), Inf) <= options.tol(3) %lmi
       info.status = 0; % terminaison normale
       printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n On trouve une solution minimum globale\n "); 
       break
@@ -77,18 +73,17 @@ function [x, lme, lmi, info] = sqp(simul, x, lme, lmi, options)
     [L, d, flag] = cholmod(hl, small, big); 
     M = L*diag(d)*L';   
     
-    info.niter = info.niter + 1;
-    
     x_h=[x_h, x]; % historique des x
     lme_h=[lme_h, lme]; % historique des lme
     lmi_h=[lmi_h, lmi]; % historique des lme
+    
+    info.niter = info.niter + 1;
     
     %% sortir si max itération atteint
     if info.niter >= options.maxit
       info.status = 2;
       break
     endif
-    
   endwhile
 
   %% la chîne finale
