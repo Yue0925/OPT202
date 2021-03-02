@@ -3,7 +3,8 @@ function [e, ce, ci, g, ae, ai, hl, indic] = chs(indic, xy, lme, lmi)
   global R S
   global EXIT_SUCESS = 0; % sortie normale 
   global EXIT_FAILURE = 1; % paramètre(s) d’entrée non correct(s)
-  
+  global FIG_XMIN FIG_XMAX FIG_YMIN FIG_YMAX
+
   %% initialisation des output de fonction
   e = [];
   ce = [];
@@ -33,8 +34,11 @@ function [e, ce, ci, g, ae, ai, hl, indic] = chs(indic, xy, lme, lmi)
   %% pilote indic
   switch (indic)
     
-    case 1 % tracer la chaîne
-      plot(x_complet, y_complet, '-b') % tracé de la chaîne
+  case 1 % tracer la chaîne
+      axis([FIG_XMIN FIG_XMAX FIG_YMIN FIG_YMAX]);
+      axis equal;
+      hold on;
+      plot(x_complet, y_complet, '-b', x_complet, y_complet, "or") % tracé de la chaîne
       indic = EXIT_SUCESS;
       return
       

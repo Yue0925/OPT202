@@ -9,3 +9,5 @@ xy = [0.2   0.4   0.6   0.8   ...
       
 R = [];
 S = [];
+
+FIG_XMIN=-1; FIG_XMAX=2; FIG_YMIN=-1.5; FIG_YMAX=2;
